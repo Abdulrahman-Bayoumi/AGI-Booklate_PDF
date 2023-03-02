@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-E:\Project\Project\obj\Debug\net6.0-windows\
+C:\Users\dell\Documents\GitHub\AGI-Booklate_PDF\Project\obj\Debug\net6.0-windows\
 Project
 none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
-E:\Project\Project\App.xaml
+C:\Users\dell\Documents\GitHub\AGI-Booklate_PDF\Project\App.xaml
 5993181263
 
 9-1828304706
 254218785676
 InsertBarcode.xaml;InsertText.xaml;MainWindow.xaml;UpdatePage.xaml;UpdatePageText.xaml;
 
-False
+True
 

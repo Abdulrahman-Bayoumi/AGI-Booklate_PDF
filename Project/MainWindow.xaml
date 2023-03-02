@@ -172,7 +172,7 @@
                             <ScaleTransform ScaleX="0.4" ScaleY="0.4" />
                         </wpf:LoadingIndicator.RenderTransform>
                     </wpf:LoadingIndicator>
-                    <TextBlock x:Name="LoadingText" Text="Generating" TextAlignment="Right" HorizontalAlignment="Center" Visibility="Collapsed"/>
+                    <Label x:Name="LoadingText"  HorizontalAlignment="Center" Visibility="Collapsed"/>
 
                 </WrapPanel>
 
