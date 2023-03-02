@@ -41,6 +41,7 @@ namespace Project
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    /// Bayoumi
     public partial class MainWindow : Window
     {
         private string textPathexal;

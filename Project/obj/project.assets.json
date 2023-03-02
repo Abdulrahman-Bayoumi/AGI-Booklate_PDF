@@ -5119,11 +5119,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Project\\Project\\Project.csproj",
+      "projectUniqueName": "C:\\Users\\dell\\Documents\\GitHub\\AGI-Booklate_PDF\\Project\\Project.csproj",
       "projectName": "Project",
-      "projectPath": "E:\\Project\\Project\\Project.csproj",
+      "projectPath": "C:\\Users\\dell\\Documents\\GitHub\\AGI-Booklate_PDF\\Project\\Project.csproj",
       "packagesPath": "C:\\Users\\dell\\.nuget\\packages\\",
-      "outputPath": "E:\\Project\\Project\\obj\\",
+      "outputPath": "C:\\Users\\dell\\Documents\\GitHub\\AGI-Booklate_PDF\\Project\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\DevExpress 22.2\\Components\\Offline Packages"

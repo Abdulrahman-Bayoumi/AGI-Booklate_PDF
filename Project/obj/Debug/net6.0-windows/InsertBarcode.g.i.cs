@@ -159,7 +159,7 @@ namespace Project {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Project;component/insertbarcode.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Project;V1.0.0.0;component/insertbarcode.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\InsertBarcode.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

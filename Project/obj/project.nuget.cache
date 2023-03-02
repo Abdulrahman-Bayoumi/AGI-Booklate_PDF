@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "A733gWRjaEiMBHd7fvY/Rbdp9NZvHivz6ZUQSmg1lVcy5W3J9LJ1WJ0X1vGYLzN2a6M0O+03nsJAVB/p1qsjwQ==",
+  "dgSpecHash": "fl1qTn+tOgiJvnEdXfZ2OK4XBpUqX/TPZ7WXqvkAXHQGPcqQLCpTtexmodGlisAf+sCWXyLQVEsoukLF7/Mh9g==",
   "success": true,
-  "projectFilePath": "E:\\Project\\Project\\Project.csproj",
+  "projectFilePath": "C:\\Users\\dell\\Documents\\GitHub\\AGI-Booklate_PDF\\Project\\Project.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\dell\\.nuget\\packages\\bytescout.spreadsheet\\4.6.0.2025\\bytescout.spreadsheet.4.6.0.2025.nupkg.sha512",
     "C:\\Users\\dell\\.nuget\\packages\\controlzex\\4.3.0\\controlzex.4.3.0.nupkg.sha512",
