@@ -1,0 +1,33 @@
+﻿<Window x:Class="Project.UpdatePage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Project"
+        mc:Ignorable="d"
+        Title="UpdatePage"  Width="320" Height="330" Background="Beige">
+    <Grid >
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="116,35,0,0" TextWrapping="Wrap" Text="Members" VerticalAlignment="Top"/>
+        <TextBlock x:Name="txtPosition" HorizontalAlignment="Left" Margin="24,109,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Position"/></TextBlock>
+        <TextBlock x:Name="txtPages" HorizontalAlignment="Left" Margin="24,73,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Pages"/></TextBlock>
+        <TextBlock x:Name="txtBarcodeType" HorizontalAlignment="Left" Margin="24,173,0,0" TextWrapping="Wrap" Text="BarcodeType" VerticalAlignment="Top"/>
+        <TextBox x:Name="pagetextBox" HorizontalAlignment="Left" Height="23" Margin="119,69,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="PositiontextBox" HorizontalAlignment="Left" Height="23" Margin="119,102,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+        <ComboBox x:Name="Barcode1D2DcomboBox" HorizontalAlignment="Left" Margin="119,140,0,0" VerticalAlignment="Top" Width="120">
+            <ComboBox.Items>
+                <ComboBoxItem Content="1D"></ComboBoxItem>
+                <ComboBoxItem Content="2D"></ComboBoxItem>
+            </ComboBox.Items>
+        </ComboBox>
+        <ComboBox x:Name="BarcodeTypecomboBox" HorizontalAlignment="Left" Margin="121,170,0,0" VerticalAlignment="Top" Width="120">
+            <ComboBoxItem Content="Barcode 128"/>
+        </ComboBox>
+        <TextBlock x:Name="txtBarcode1D2D" HorizontalAlignment="Left" Margin="23,143,0,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.689,1.82"><Run Text="Barcode 1D-2D"/></TextBlock>
+        <TextBlock x:Name="txtIsDrawText" HorizontalAlignment="Left" Margin="24,211,0,0" TextWrapping="Wrap" Text="IsDrawText" VerticalAlignment="Top"/>
+        <RadioButton  x:Name="RbNumberMood" Margin="119,211,154,65"  />
+        <Button x:Name="closeBtn" Content="Close" HorizontalAlignment="Left" Margin="152,260,0,0" VerticalAlignment="Top" Width="58" Click="closeBtn_Click"/>
+        <Button x:Name="updatetBtn" Content="Update" HorizontalAlignment="Left" Margin="226,260,0,0" VerticalAlignment="Top" Width="57" Click="updatetBtn_Click"  />
+
+    </Grid>
+
+</Window>
