@@ -35,6 +35,9 @@ using PdfDocument = PdfSharp.Pdf.PdfDocument;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.ComponentModel;
+using Size = GemBox.Document.Size;
+using SkiaSharp;
+using ZXing;
 
 namespace Project
 {
@@ -57,7 +60,7 @@ namespace Project
                 id = 1,
                 Position = "30-40",
                 Pages = "1-2",
-                BarcodeType = "Barcode 128",
+                BarcodeType = "CODE_128",
                 Barcode1D2D = "1D",
                 IsDrowText = true,
             });
@@ -69,6 +72,7 @@ namespace Project
                 Fontcolor = "Gray",
                 FontSize = 10,
                 FontType = "Times New Roman",
+                IsOmrFont= true,
             });
 
             InitializeComponent();
@@ -161,14 +165,11 @@ namespace Project
 
                 }
             }
-            GemBox.Document.ComponentInfo.SetLicense("FREE-LIMITED-KEY");
-            var document = DocumentModel.Load(path, LoadOptions.PdfDefault);
-            document.Save("temp.pdf");
             GemBox.Pdf.ComponentInfo.SetLicense("FREE-LIMITED-KEY");
-            var copydocument = GemBox.Pdf.PdfDocument.Load("temp.pdf");
+            var copydocument = GemBox.Pdf.PdfDocument.Load(path);
             for (int xxx = 1; xxx <= listoftextbarcode.Count; xxx++)
             {
-                document = DocumentModel.Load(path, LoadOptions.PdfDefault);
+               
                 for (int index = 0; index < copydocument.Pages.Count; index++)
                 {
                     var page = copydocument.Pages[index];
@@ -177,27 +178,84 @@ namespace Project
                         foreach (var text in Barcodes)
                         {
                             string[] numbers = text.Pages.Split('-');
-
+                            string[]size = text.Position.Split("-");
+                            string d=text.Barcode1D2D.ToString();
+                            string type = text.BarcodeType.ToString();
                             if (Enumerable.Range(int.Parse(numbers[0]) - 1, int.Parse(numbers[1])).Contains(index))
                             {
-                                var code128 = CreateBarcodeField(
-                                document,
-                                barcodeType: "Code128",
-                                barcodeValue: listoftextbarcode[xxx - 1],
-                                showLabel: text.IsDrowText
-                                //foregroundColor: "0xff7225",
-                                //backgroundColor: "0x25b2ff"
-                                );
-                                document.Sections.Add(
-                                       new GemBox.Document.Section(document,
-                                         new GemBox.Document.Paragraph(document, "Abdulrahman Code 128:"),
-                                        new GemBox.Document.Paragraph(document, code128)));
+                                var format = new BarcodeFormat();
+                                if (d == "1D")
+                                {
+                                    if (type == "CODE_128")
+                                    {
+                                        format = BarcodeFormat.CODE_128;
+
+                                    }
+                                    else if (type == "DATA_MATRIX")
+                                    {
+                                        format = BarcodeFormat.EAN_13;
+                                    }
+                                    else
+                                    {
+                                        format = BarcodeFormat.CODE_39;
+
+                                    }
+                                }
+                                else if (d == "2D")
+                                {
+                                    if(type== "QR_CODE")
+                                    {
+                                        format = BarcodeFormat.QR_CODE;
+
+                                    }else if(type == "DATA_MATRIX")
+                                    {
+                                        format = BarcodeFormat.DATA_MATRIX;
+                                    }
+                                    else
+                                    {
+                                        format = BarcodeFormat.AZTEC;
+
+                                    }
+                                }
+                               
+                              
+                                var barcodeWriter = new ZXing.SkiaSharp.BarcodeWriter()
+                                {
+
+                                    Format = format,
+                                    Options = new ZXing.Common.EncodingOptions
+                                    {
+                                        Height = 50,
+                                        Width = 150,
+                                        PureBarcode= !(text.IsDrowText),
+                                    },
+
+                                };
+
+                                var bm = barcodeWriter
+                                .Write(listoftextbarcode[xxx-1]);
+
+                                using (var data = bm.Encode(SKEncodedImageFormat.Png, 80))
+                                using (var stream = File.OpenWrite("out.jpg"))
+                                {
+                                    // save the data to a stream
+                                    data.SaveTo(stream);
+                                }
+                                var img = PdfImage.Load("out.jpg");
+
+                               
+                                double x =double.Parse(size[0]) , y = page.CropBox.Top - double.Parse( size[1] ) - img.Size.Height;
+
+                                // Draw the image to the page.
+                                page.Content.DrawImage(img, new PdfPoint(x, y));
+                           
                             }
                         }
 
                     }
                 }
-                document.Save("E:\\Project\\copies\\" + xxx + ".pdf");
+                copydocument.Save("E:\\Project\\copies\\" + xxx + ".pdf");
+                copydocument.Close();
             }
             for (int xxx = 1; xxx <= listoftextbarcode.Count; xxx++)
             {
@@ -214,16 +272,8 @@ namespace Project
                             string[] position = text.Position.Split('-');
                             if (Enumerable.Range(int.Parse(numbers[0]) - 1, int.Parse(numbers[1])).Contains(index))
                             {
-                                // Set font family and size.
-                                // All text appended next uses the specified font family and size.
-
-                                // Set the location of the bottom-left corner of the text.
-                                // We want top-left corner of the text to be at location (100, 100)
-                                // from the top-left corner of the page.
-                                // NOTE: In PDF, location  (0, 0) is at the bottom-left corner of the page
-                                // and the positive y axis extends vertically upward.
-                                // Draw text to the page.
-                                var c = text.Fontcolor;
+                                
+                               var c = text.Fontcolor;
                                 formattedText.FontFamily = new PdfFontFamily(text.FontType);
                                 formattedText.FontSize = text.FontSize;
                                 double x = double.Parse(position[0]), y = page.CropBox.Top - double.Parse(position[1]) - formattedText.Height;
@@ -238,28 +288,9 @@ namespace Project
                 }
                 copydocument.Save();
                 copydocument.Close();
-                Thread.Sleep(100);
             }
 
-            static Field CreateBarcodeField(DocumentModel document, string barcodeType, string barcodeValue,
-    int? heightInPoints = null, string foregroundColor = null,
-    string backgroundColor = null, bool showLabel = false)
-            {
-                var instructionText = new StringBuilder();
-                instructionText.Append(barcodeValue).Append(' ').Append(barcodeType);
-
-                if (heightInPoints.HasValue)
-                    instructionText.Append(" \\h ").Append(LengthUnitConverter.Convert(heightInPoints.Value, LengthUnit.Point, LengthUnit.Twip));
-                if (foregroundColor != null)
-                    instructionText.Append(" \\f ").Append(foregroundColor);
-                if (backgroundColor != null)
-                    instructionText.Append(" \\b ").Append(backgroundColor);
-                if (showLabel)
-                    instructionText.Append(" \\t");
-
-                return new Field(document, FieldType.DisplayBarcode, instructionText.ToString());
-            }
-            for (int k = 1; k <= listoftextbarcode.Count; k = k + int.Parse(txtmerged.Text))
+            for (int k = 1; k <= listoftextbarcode.Count; k = k + marged)
             {
                 using (PdfDocument outPdf = new PdfDocument())
                 {

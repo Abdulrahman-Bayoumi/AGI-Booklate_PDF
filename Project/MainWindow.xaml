@@ -123,12 +123,13 @@
                 SelectionUnit="Cell"
                 SelectionMode="Extended"  Grid.Row="4" Grid.ColumnSpan="5" Margin="13,28,15,0" >
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Id" Binding="{Binding id}" />
+                        <DataGridTextColumn Width="20" Header="Id" Binding="{Binding id}" />
                         <DataGridTextColumn Header="Position" Binding="{Binding Position}" />
                         <DataGridTextColumn Header="Pages" Binding="{Binding Pages}" />
                         <DataGridTextColumn Header="Fonttype" Binding="{Binding FontType}" />
                         <DataGridTextColumn Header="FontSize" Binding="{Binding FontSize}" />
                         <DataGridTextColumn  Header="FontColor" Binding="{Binding Fontcolor}" />
+                        <DataGridTextColumn  Header="IsOmrFont" Binding="{Binding IsOmrFont}" />
                         <DataGridTemplateColumn>
                             <DataGridTemplateColumn.HeaderTemplate>
                                 <DataTemplate>

@@ -14,6 +14,7 @@ namespace Project
         public string FontType { get; set; }
         public int FontSize { get; set; }
         public string Fontcolor { get; set; }
+        public bool IsOmrFont { get; set; }
 
     }
 }

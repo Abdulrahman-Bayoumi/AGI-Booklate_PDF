@@ -13,14 +13,14 @@
         <TextBlock x:Name="txtBarcodeType" HorizontalAlignment="Left" Margin="24,173,0,0" TextWrapping="Wrap" Text="BarcodeType" VerticalAlignment="Top"/>
         <TextBox x:Name="pagetextBox" HorizontalAlignment="Left" Height="23" Margin="119,69,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name="PositiontextBox" HorizontalAlignment="Left" Height="23" Margin="119,102,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
-        <ComboBox x:Name="Barcode1D2DcomboBox" HorizontalAlignment="Left" Margin="119,140,0,0" VerticalAlignment="Top" Width="120">
+        <ComboBox x:Name="Barcode1D2DcomboBox" HorizontalAlignment="Left" Margin="119,140,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="Barcode1D2DcomboBox_SelectionChanged">
             <ComboBox.Items>
                 <ComboBoxItem Content="1D"></ComboBoxItem>
                 <ComboBoxItem Content="2D"></ComboBoxItem>
             </ComboBox.Items>
         </ComboBox>
         <ComboBox x:Name="BarcodeTypecomboBox" HorizontalAlignment="Left" Margin="121,170,0,0" VerticalAlignment="Top" Width="120">
-            <ComboBoxItem Content="Barcode 128"/>
+        
         </ComboBox>
         <TextBlock x:Name="txtBarcode1D2D" HorizontalAlignment="Left" Margin="23,143,0,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.689,1.82"><Run Text="Barcode 1D-2D"/></TextBlock>
         <TextBlock x:Name="txtIsDrawText" HorizontalAlignment="Left" Margin="24,211,0,0" TextWrapping="Wrap" Text="IsDrawText" VerticalAlignment="Top"/>

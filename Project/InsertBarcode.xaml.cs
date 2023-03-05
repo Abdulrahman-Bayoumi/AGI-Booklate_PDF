@@ -20,12 +20,22 @@ namespace Project
     public partial class InsertBarcode : Window
     {
         internal Barcode barcodeinfo;
+        List<string>Types1D=new List<string>();
+        List<string> Types2D = new List<string>();
 
         public InsertBarcode()
         {
             InitializeComponent();
+            Types1D.Add("CODE_128");
+            Types1D.Add("EAN_13");
+            Types1D.Add("CODE_39");
+            Types2D.Add("QR_CODE");
+            Types2D.Add("DATA_MATRIX");
+            Types2D.Add("AZTEC");
+
+
         }
-        
+
         private void InsertBtn_Click(object sender, RoutedEventArgs e)
         {
             barcodeinfo = new Barcode()
@@ -45,6 +55,22 @@ namespace Project
         {
             this.Close();
 
+        }
+
+        private void Barcode1D2DcomboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBoxItem select =(ComboBoxItem) Barcode1D2DcomboBox.SelectedItem;
+            
+            if (select.Content.ToString() == "1D")
+            {
+
+                BarcodeTypecomboBox.ItemsSource =Types1D ;
+            }
+            if (select.Content.ToString() == "2D")
+            {
+
+                BarcodeTypecomboBox.ItemsSource = Types2D;
+            }
         }
     }
 }
