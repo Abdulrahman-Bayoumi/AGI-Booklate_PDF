@@ -152,7 +152,6 @@ namespace Project
                 marged = int.Parse(txtmerged.Text);
 
             }));
-
             if (RbNumberMoodVl == true)
             {
                 //list of all number from num1 to num2
@@ -302,9 +301,8 @@ namespace Project
         {
             this.Dispatcher.Invoke(new Action(() =>
             {
-                LoadingText.Visibility = Visibility.Visible;
-                LoadingShape.Visibility = Visibility.Visible;
                 LoadingText.Content = "Generating" + e.UserState + ":" + e.ProgressPercentage;
+
 
             }));
         }
@@ -347,7 +345,6 @@ namespace Project
         {
             LoadingText.Visibility = Visibility.Visible;
             LoadingShape.Visibility = Visibility.Visible;
-            LoadingText.Content = "Generating" + e.UserState + ":" + e.ProgressPercentage;
 
             worker.RunWorkerAsync();
 
