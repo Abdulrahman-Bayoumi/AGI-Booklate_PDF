@@ -144,6 +144,8 @@ namespace Project
             int to = 0;
             string path = null;
             int marged = 0;
+            int cou = 0;
+
             this.Dispatcher.Invoke((() =>
             {
                 RbNumberMoodVl = RbNumberMood.IsChecked;
@@ -156,20 +158,23 @@ namespace Project
                 marged = int.Parse(txtmerged.Text);
 
             }));
+
             if (RbNumberMoodVl == true)
             {
                 //list of all number from num1 to num2
                 for (int xxx = from; xxx <= to; xxx++)
                 {
                     listoftextbarcode.Add(Convert.ToString(xxx));
-
+                  
                 }
             }
+            int total = listoftextbarcode.Count * 3;
+
             GemBox.Pdf.ComponentInfo.SetLicense("FREE-LIMITED-KEY");
             var copydocument = GemBox.Pdf.PdfDocument.Load(path);
+            
             for (int xxx = 1; xxx <= listoftextbarcode.Count; xxx++)
             {
-               
                 for (int index = 0; index < copydocument.Pages.Count; index++)
                 {
                     var page = copydocument.Pages[index];
@@ -256,6 +261,10 @@ namespace Project
                 }
                 copydocument.Save("E:\\Project\\copies\\" + xxx + ".pdf");
                 copydocument.Close();
+                cou++;
+                int percents = (cou * 100) / total;
+
+                worker.ReportProgress(100, percents);
             }
             for (int xxx = 1; xxx <= listoftextbarcode.Count; xxx++)
             {
@@ -288,8 +297,11 @@ namespace Project
                 }
                 copydocument.Save();
                 copydocument.Close();
-            }
+                cou++;
+                int percents = (cou * 100) / total;
 
+                worker.ReportProgress(100, percents);
+            }
             for (int k = 1; k <= listoftextbarcode.Count; k = k + marged)
             {
                 using (PdfDocument outPdf = new PdfDocument())
@@ -304,6 +316,10 @@ namespace Project
 
                     outPdf.Save("E:\\Project\\copies\\" + k + "newfilemarged.pdf");
                 }
+                cou++;
+                int percents = (cou * 100) / total;
+
+                worker.ReportProgress(100, percents);
             }
 
 
@@ -323,7 +339,10 @@ namespace Project
         {
             this.Dispatcher.Invoke(new Action(() =>
             {
-                LoadingText.Visibility = Visibility.Collapsed;
+                LoadingText.Foreground = new SolidColorBrush( System.Windows.Media.Color.FromRgb(0, 128, 0));
+                LoadingText.Content = "Complating";
+
+                //LoadingText.Visibility = Visibility.Collapsed;
                 LoadingShape.Visibility = Visibility.Collapsed;
 
             }));
@@ -332,7 +351,7 @@ namespace Project
         {
             this.Dispatcher.Invoke(new Action(() =>
             {
-                LoadingText.Content = "Generating" + e.UserState + ":" + e.ProgressPercentage;
+                LoadingText.Content = "Generating " + e.UserState + " : " + e.ProgressPercentage;
 
 
             }));
@@ -376,13 +395,16 @@ namespace Project
         {
             LoadingText.Visibility = Visibility.Visible;
             LoadingShape.Visibility = Visibility.Visible;
-
+           
             worker.RunWorkerAsync();
 
 
         }
 
-
+        private void Worker_ProgressChanged(object? sender, ProgressChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
 
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
@@ -472,6 +494,17 @@ namespace Project
             Texts.Add(item);
             TextDataGrid.ItemsSource = null;
             TextDataGrid.ItemsSource = Texts;
+        }
+
+        private void btnTemplate_Click(object sender, RoutedEventArgs e)
+        {
+            string startupPath = System.IO.Directory.GetCurrentDirectory();
+            string pathfile = System.IO.Path.Combine(startupPath, "template.xlsx");
+            var dlg = new Microsoft.Win32.SaveFileDialog();
+            if (dlg.ShowDialog() == true)
+            {
+                File.Copy(pathfile, dlg.FileName, true);
+            }
         }
     }
 }

@@ -25,4 +25,13 @@
     <PackageReference Include="ZXing.Net.Bindings.SkiaSharp" Version="0.16.13" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Book1.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="template.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
