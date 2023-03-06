@@ -38,6 +38,7 @@ using System.ComponentModel;
 using Size = GemBox.Document.Size;
 using SkiaSharp;
 using ZXing;
+using System.Drawing;
 
 namespace Project
 {
@@ -69,7 +70,7 @@ namespace Project
                 id = 1,
                 Position = "30-40",
                 Pages = "1-2",
-                Fontcolor = "Gray",
+                Fontcolor = "#0000ff",
                 FontSize = 10,
                 FontType = "Times New Roman",
                 IsOmrFont= true,
@@ -145,7 +146,6 @@ namespace Project
             string path = null;
             int marged = 0;
             int cou = 0;
-
             this.Dispatcher.Invoke((() =>
             {
                 RbNumberMoodVl = RbNumberMood.IsChecked;
@@ -279,14 +279,16 @@ namespace Project
                         {
                             string[] numbers = text.Pages.Split('-');
                             string[] position = text.Position.Split('-');
+                            var rgb = System.Drawing.ColorTranslator.FromHtml(text.Fontcolor);
                             if (Enumerable.Range(int.Parse(numbers[0]) - 1, int.Parse(numbers[1])).Contains(index))
                             {
-                                
-                               var c = text.Fontcolor;
+                                formattedText.Color = PdfColor.FromRgb(rgb.R, rgb.G, rgb.B);
+
                                 formattedText.FontFamily = new PdfFontFamily(text.FontType);
                                 formattedText.FontSize = text.FontSize;
                                 double x = double.Parse(position[0]), y = page.CropBox.Top - double.Parse(position[1]) - formattedText.Height;
                                 formattedText.AppendLine(listoftextbarcode[xxx - 1]);
+
                                 page.Content.DrawText(formattedText, new PdfPoint(x, y));
 
                                 //formattedText.Color= PdfColor.FromRgb(text.Fontcolor); 
@@ -490,7 +492,15 @@ namespace Project
             InsertText Ipage = new InsertText();
             Ipage.ShowDialog();
             var item = Ipage.textinfo;
-            item.id = Texts.LastOrDefault().id + 1;
+            if (Texts.Count == 0)
+            {
+                item.id =  1;
+
+            }
+            else
+            {
+                item.id = Texts.LastOrDefault().id + 1;
+            }
             Texts.Add(item);
             TextDataGrid.ItemsSource = null;
             TextDataGrid.ItemsSource = Texts;
