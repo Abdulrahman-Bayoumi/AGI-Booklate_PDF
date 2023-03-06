@@ -8,7 +8,7 @@
         
         xmlns:wpf="clr-namespace:LoadingIndicators.WPF;assembly=LoadingIndicators.WPF"
         mc:Ignorable="d"
-        Title="AGI-Booklet PDF" Height="570" Width="550">
+        Title="AGI-Booklet PDF" ResizeMode="NoResize" Height="570" Width="550">
     <DockPanel LastChildFill="True" >
         <materialDesign:Card DockPanel.Dock="Right" Background="#FFF4F2F2">
             <Grid Loaded="Grid_Loaded">
@@ -31,7 +31,8 @@
 
                     <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
-                <TextBlock TextAlignment="Center" Grid.Row="0" Grid.Column="1" Margin="5,9,40,1" FontSize="15"><Run Text="PDF Path"/></TextBlock>
+                <TextBlock TextAlignment="Center" Grid.Row="0" Margin="0,10,57,0" FontSize="15" Grid.ColumnSpan="2"><Run Text="PDF Path"/></TextBlock>
+
                 <TextBox x:Name="txtPath" Grid.Row="0" Grid.Column="2" Margin="0,8,107,3" Grid.ColumnSpan="3" RenderTransformOrigin="0.5,0.5">
                     <TextBox.RenderTransform>
                         <TransformGroup>
@@ -42,22 +43,24 @@
                         </TransformGroup>
                     </TextBox.RenderTransform>
                 </TextBox>
-                <Button BorderBrush="Black" x:Name="btnBrowse" Grid.Row="0" Grid.Column="4"  Margin="74,10,17,0" Content="Browse" Background="#FFF4F2F2" Click="btnBrowse_Click"/>
+                <StackPanel Grid.Row="0" Grid.Column="4" Margin="74,10,17,0">
+                    <Button BorderBrush="Black" x:Name="btnBrowse"    Content="Browse" Background="#FFF4F2F2" Click="btnBrowse_Click" Height="30"/>
+                </StackPanel>
                 <TextBlock TextAlignment="Center" VerticalAlignment="Top" Grid.Row="2" Margin="7,1,51,0" FontSize="15" Height="20" Grid.ColumnSpan="2" ><Run Text="# Merged"/></TextBlock>
                 <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,2,34,15" Grid.RowSpan="2" >
-                    <RadioButton  x:Name="RbNumberMood" Content="Number Mod" Checked="RbNumberMod_Checked" Margin="0 19"/>
-                    <RadioButton Content="File Mod" x:Name="RbFileMood" Checked="RbNumberMod_Checked" Height="39" />
+                    <RadioButton  x:Name="RbNumberMood" Content="Number Mode" Checked="RbNumberMod_Checked" Margin="0 19"/>
+                    <RadioButton Content="File Mode" x:Name="RbFileMood" Checked="RbNumberMod_Checked" Height="39" />
                 </StackPanel>
                 <TextBox Grid.Row="2" VerticalAlignment="Bottom" Margin="1,0,81,9" Height="25" RenderTransformOrigin="0.515,-0.48" Grid.Column="2" Name="txtmerged"/>
 
                 <TextBox VerticalAlignment="Top" Grid.Column="2" Grid.Row="1"  Margin="107,18,94,0" RenderTransformOrigin="0.453,-1" Height="24" x:Name="txtFrom" Grid.ColumnSpan="2"/>
                 <Label  Grid.Column="3" Grid.Row="1" Margin="23,14,39,36" RenderTransformOrigin="0.48,0.268">From</Label>
                 <TextBox VerticalAlignment="Top" Grid.Column="3" Grid.Row="1"  Margin="0,18,155,0" RenderTransformOrigin="0.453,-1" Height="24" x:Name="txtTo" HorizontalAlignment="Right" Width="45" Grid.ColumnSpan="2"/>
-                <Label  Grid.Column="4" Grid.Row="1" Margin="13,16,118,36">TO</Label>
+                <Label  Grid.Column="4" Grid.Row="1" Margin="13,16,118,36">To</Label>
                 <Button x:Name="btnBrowseExal" Content="Browse" Grid.Column="2" Grid.Row="1" VerticalAlignment="Top" Margin="107,54,63,0" Height="24" Click="btnBrowes_Click" Grid.ColumnSpan="2"/>
                 <Button Content="Template" Grid.Column="3" Grid.Row="1" VerticalAlignment="Top" Margin="0,54,133,0" Height="24" Name="btnTemplate" Grid.ColumnSpan="2" HorizontalAlignment="Right" Width="76" Click="btnTemplate_Click"/>
-                <StackPanel VerticalAlignment="Top" Grid.Row="3" Margin="1,8,22,0" Orientation="Horizontal" Grid.Column="1">
-                    <TextBlock  TextAlignment="Center"  FontSize="15" Height="28" Width="68"><Run Text="Borcodes"/></TextBlock>
+                <StackPanel VerticalAlignment="Top" Grid.Row="3" Margin="10,8,25,0" Orientation="Horizontal" Grid.ColumnSpan="2">
+                    <TextBlock  TextAlignment="Center"  FontSize="15" Height="28" Width="68"><Run Text="Barcodes"/></TextBlock>
                     <Button x:Name="btnInsert" Background="Transparent"   BorderThickness="0" Click="btnInsert_Click_1">
                         <materialDesign:PackIcon Kind="PlusBox" RenderTransformOrigin="-0.182,0.502" Margin="0 0 0 2"/>
 
@@ -76,12 +79,12 @@
                 SelectionUnit="Cell"
                 SelectionMode="Extended"  Grid.Row="3" Grid.ColumnSpan="5" Margin="13,41,15,5"  >
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Id" Binding="{Binding id}" />
-                        <DataGridTextColumn Header="Position" Binding="{Binding Position}" />
-                        <DataGridTextColumn Header="Pages" Binding="{Binding Pages}" />
+                        <DataGridTextColumn  Width="20" Header="Id" Binding="{Binding id}" />
+                        <DataGridTextColumn Width="60" Header="Position" Binding="{Binding Position}" />
+                        <DataGridTextColumn Width="60" Header="Pages" Binding="{Binding Pages}" />
                         <DataGridTextColumn Header="Barcode 1D-2D" Binding="{Binding Barcode1D2D}" />
                         <DataGridTextColumn Header="BarcodeType" Binding="{Binding BarcodeType}" />
-                        <DataGridCheckBoxColumn  Header="IsDrowText" Binding="{Binding IsDrowText}" />
+                        <DataGridCheckBoxColumn  Header="DrawText" Binding="{Binding IsDrowText}" />
                         <DataGridTemplateColumn>
                             <DataGridTemplateColumn.HeaderTemplate>
                                 <DataTemplate>
@@ -105,7 +108,7 @@
                     </DataGrid.Columns>
 
                 </DataGrid>
-                <StackPanel Orientation="Horizontal"  VerticalAlignment="Top" Grid.Row="4" Margin="0,0,46,0" Grid.ColumnSpan="2" >
+                <StackPanel Orientation="Horizontal"  VerticalAlignment="Top" Grid.Row="4" Margin="-2,0,49,0" Grid.ColumnSpan="2" >
                     <TextBlock  TextAlignment="Center" FontSize="15" Height="28" Width="56"><Run Text="Text"/></TextBlock>
                     <Button x:Name="btnInserttext" BorderThickness="0" Background="Transparent" Click="btnInserttext_Click">
                         <materialDesign:PackIcon Kind="PlusBox" VerticalAlignment="Center" Width="20" HorizontalAlignment="Center" Margin="0 0 0 3"/>
@@ -127,9 +130,9 @@
                         <DataGridTextColumn Header="Position" Binding="{Binding Position}" />
                         <DataGridTextColumn Header="Pages" Binding="{Binding Pages}" />
                         <DataGridTextColumn Header="Fonttype" Binding="{Binding FontType}" />
-                        <DataGridTextColumn Header="FontSize" Binding="{Binding FontSize}" />
+                        <DataGridTextColumn Width="60" Header="FontSize" Binding="{Binding FontSize}" />
                         <DataGridTextColumn  Header="FontColor" Binding="{Binding Fontcolor}" />
-                        <DataGridTextColumn  Header="IsOmrFont" Binding="{Binding IsOmrFont}" />
+                        <DataGridCheckBoxColumn  Header="IsOmrFont" Binding="{Binding IsOmrFont}" />
                         <DataGridTemplateColumn>
                             <DataGridTemplateColumn.HeaderTemplate>
                                 <DataTemplate>
@@ -153,8 +156,10 @@
                     </DataGrid.Columns>
 
                 </DataGrid>
-                <Button x:Name="btnGenerate" Grid.Column="3" Grid.Row="5" Content="Generate" Margin="102,15,94,15" Grid.RowSpan="2" Click="btnGenerate_Click" Grid.ColumnSpan="2" />
-                <Button x:Name="btnExit" Grid.Column="4" Grid.Row="5" Content="Exit" Margin="74,15,28,15" Grid.RowSpan="2" Click="btnExit_Click" />
+                <StackPanel Orientation="Horizontal"  Margin="48,15,38,15" Grid.RowSpan="2"  Grid.Column="3" Grid.Row="5" Grid.ColumnSpan="2">
+                    <Button Margin="0 0 20 0" x:Name="btnGenerate"  Content="Generate" Click="btnGenerate_Click" Width="82"  />
+                    <Button x:Name="btnExit"  Content="Exit"  Click="btnExit_Click" Width="67" />
+                </StackPanel>
 
 
                 <WrapPanel  Grid.Row="5" Height="44" Width="209"  HorizontalAlignment="Left"

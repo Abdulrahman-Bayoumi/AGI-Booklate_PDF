@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Project"
         mc:Ignorable="d"
-       Title="InsertText" Width="320" Height="330" Background="Beige">
+       Title="InsertText" ResizeMode="NoResize" Width="320" Height="330" Background="Beige">
     <Grid >
         <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="116,35,0,0" TextWrapping="Wrap" Text="Members" VerticalAlignment="Top"/>
         <TextBlock x:Name="txtPosition" HorizontalAlignment="Left" Margin="24,109,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Position"/></TextBlock>

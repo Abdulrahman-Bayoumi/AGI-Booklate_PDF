@@ -263,3 +263,5 @@ C:\Users\dell\Documents\GitHub\AGI-Booklate_PDF\Project\obj\Debug\net6.0-windows
 C:\Users\dell\Documents\GitHub\AGI-Booklate_PDF\Project\obj\Debug\net6.0-windows\Project.genruntimeconfig.cache
 C:\Users\dell\Documents\GitHub\AGI-Booklate_PDF\Project\obj\Debug\net6.0-windows\ref\Project.dll
 C:\Users\dell\Documents\GitHub\AGI-Booklate_PDF\Project\bin\Debug\net6.0-windows\template.xlsx
+C:\Users\dell\Documents\GitHub\AGI-Booklate_PDF\Project\bin\Debug\net6.0-windows\Resources\Arabic OMR2.ttf
+C:\Users\dell\Documents\GitHub\AGI-Booklate_PDF\Project\bin\Debug\net6.0-windows\Resources\OMRextnd.ttf

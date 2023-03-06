@@ -39,6 +39,7 @@ using Size = GemBox.Document.Size;
 using SkiaSharp;
 using ZXing;
 using System.Drawing;
+using System.ServiceModel.Syndication;
 
 namespace Project
 {
@@ -158,6 +159,7 @@ namespace Project
                 marged = int.Parse(txtmerged.Text);
 
             }));
+            string Directory = System.IO.Path.GetDirectoryName(path);
 
             if (RbNumberMoodVl == true)
             {
@@ -169,6 +171,7 @@ namespace Project
                 }
             }
             int total = listoftextbarcode.Count * 3;
+            Directory = Directory + "Resulte";
 
             GemBox.Pdf.ComponentInfo.SetLicense("FREE-LIMITED-KEY");
             var copydocument = GemBox.Pdf.PdfDocument.Load(path);
@@ -259,7 +262,8 @@ namespace Project
 
                     }
                 }
-                copydocument.Save("E:\\Project\\copies\\" + xxx + ".pdf");
+                System.IO.Directory.CreateDirectory(Directory);
+                copydocument.Save(Directory +"\\"+ xxx + ".pdf");
                 copydocument.Close();
                 cou++;
                 int percents = (cou * 100) / total;
@@ -268,7 +272,7 @@ namespace Project
             }
             for (int xxx = 1; xxx <= listoftextbarcode.Count; xxx++)
             {
-                copydocument = GemBox.Pdf.PdfDocument.Load("E:\\Project\\copies\\" + xxx + ".pdf");
+                copydocument = GemBox.Pdf.PdfDocument.Load(Directory +"\\"+ xxx + ".pdf");
 
                 for (int index = 0; index < copydocument.Pages.Count; index++)
                 {
@@ -276,23 +280,88 @@ namespace Project
                     using (var formattedText = new PdfFormattedText())
                     {
                         foreach (var text in Texts)
-                        {
+                        { 
                             string[] numbers = text.Pages.Split('-');
                             string[] position = text.Position.Split('-');
                             var rgb = System.Drawing.ColorTranslator.FromHtml(text.Fontcolor);
-                            if (Enumerable.Range(int.Parse(numbers[0]) - 1, int.Parse(numbers[1])).Contains(index))
+                            if (text.IsOmrFont == true && int.TryParse(listoftextbarcode[xxx - 1], out int value))
                             {
-                                formattedText.Color = PdfColor.FromRgb(rgb.R, rgb.G, rgb.B);
+                                string newvalue=string.Empty;
+                                value = int.Parse(listoftextbarcode[xxx - 1]);
+                                string binary = Convert.ToString(value, 2);
 
-                                formattedText.FontFamily = new PdfFontFamily(text.FontType);
-                                formattedText.FontSize = text.FontSize;
-                                double x = double.Parse(position[0]), y = page.CropBox.Top - double.Parse(position[1]) - formattedText.Height;
-                                formattedText.AppendLine(listoftextbarcode[xxx - 1]);
+                                if (text.FontType== "Arabic OMR")
+                                {
+                                    newvalue = binary.Replace("0", "¹ ");
+                                    newvalue = newvalue.Replace("1", "² ");
+                                    if (Enumerable.Range(int.Parse(numbers[0]) - 1, int.Parse(numbers[1])).Contains(index))
+                                    {
+                                        formattedText.Color = PdfColor.FromRgb(rgb.R, rgb.G, rgb.B);
 
-                                page.Content.DrawText(formattedText, new PdfPoint(x, y));
+                                        formattedText.FontFamily = new PdfFontFamily("Resources",text.FontType);
+                                        formattedText.FontSize = text.FontSize;
+                                        double x = double.Parse(position[0]), y = page.CropBox.Top - double.Parse(position[1]) - formattedText.Height;
+                                        formattedText.AppendLine(newvalue);
 
-                                //formattedText.Color= PdfColor.FromRgb(text.Fontcolor); 
+                                        page.Content.DrawText(formattedText, new PdfPoint(x, y));
+
+                                    }
+
+
+                                }
+                                else if (text.FontType== "OMRBubblesLCextended")
+                                {
+                                    newvalue = binary.Replace("0", "` ");
+                                    newvalue = newvalue.Replace("1", "~ ");
+                                    if (Enumerable.Range(int.Parse(numbers[0]) - 1, int.Parse(numbers[1])).Contains(index))
+                                    {
+                                        formattedText.Color = PdfColor.FromRgb(rgb.R, rgb.G, rgb.B);
+
+                                        formattedText.FontFamily = new PdfFontFamily("Resources",text.FontType);
+                                        formattedText.FontSize = text.FontSize;
+                                        double x = double.Parse(position[0]), y = page.CropBox.Top - double.Parse(position[1]) - formattedText.Height;
+                                        formattedText.AppendLine(newvalue);
+
+                                        page.Content.DrawText(formattedText, new PdfPoint(x, y));
+
+                                    }
+
+                                }
+                                else
+                                {
+                                    if (Enumerable.Range(int.Parse(numbers[0]) - 1, int.Parse(numbers[1])).Contains(index))
+                                    {
+                                        formattedText.Color = PdfColor.FromRgb(rgb.R, rgb.G, rgb.B);
+
+                                        formattedText.FontFamily = new PdfFontFamily(text.FontType);
+                                        formattedText.FontSize = text.FontSize;
+                                        double x = double.Parse(position[0]), y = page.CropBox.Top - double.Parse(position[1]) - formattedText.Height;
+                                        formattedText.AppendLine(listoftextbarcode[xxx - 1]);
+
+                                        page.Content.DrawText(formattedText, new PdfPoint(x, y));
+
+                                    }
+
+                                }
+
                             }
+                            else
+                            {
+                                if (Enumerable.Range(int.Parse(numbers[0]) - 1, int.Parse(numbers[1])).Contains(index))
+                                {
+                                    formattedText.Color = PdfColor.FromRgb(rgb.R, rgb.G, rgb.B);
+
+                                    formattedText.FontFamily = new PdfFontFamily(text.FontType);
+                                    formattedText.FontSize = text.FontSize;
+                                    double x = double.Parse(position[0]), y = page.CropBox.Top - double.Parse(position[1]) - formattedText.Height;
+                                    formattedText.AppendLine(listoftextbarcode[xxx - 1]);
+
+                                    page.Content.DrawText(formattedText, new PdfPoint(x, y));
+
+                                }
+
+                            }
+
                         }
 
                     }
@@ -310,13 +379,13 @@ namespace Project
                 {
                     for (int p = k; p < k + marged; p++)
                     {
-                        using (PdfDocument one = PdfReader.Open("E:\\Project\\copies\\" + p + ".pdf", PdfDocumentOpenMode.Import))
+                        using (PdfDocument one = PdfReader.Open(Directory+"\\" + p + ".pdf", PdfDocumentOpenMode.Import))
 
                             CopyPages(one, outPdf);
                     }
 
 
-                    outPdf.Save("E:\\Project\\copies\\" + k + "newfilemarged.pdf");
+                    outPdf.Save(Directory+"\\"  + k + " new_filemarged.pdf");
                 }
                 cou++;
                 int percents = (cou * 100) / total;
@@ -333,7 +402,10 @@ namespace Project
                 }
             }
 
-
+            for(int y = 1; y <= listoftextbarcode.Count; y++)
+            {
+                System.IO.File.Delete(Directory + "\\" + y + ".pdf");
+            }
 
         }
 
@@ -342,7 +414,7 @@ namespace Project
             this.Dispatcher.Invoke(new Action(() =>
             {
                 LoadingText.Foreground = new SolidColorBrush( System.Windows.Media.Color.FromRgb(0, 128, 0));
-                LoadingText.Content = "Complating";
+                LoadingText.Content = "Completing";
 
                 //LoadingText.Visibility = Visibility.Collapsed;
                 LoadingShape.Visibility = Visibility.Collapsed;
@@ -420,10 +492,24 @@ namespace Project
             InsertBarcode Ipage = new InsertBarcode();
             Ipage.ShowDialog();
             var item = Ipage.barcodeinfo;
-            item.id = Barcodes.LastOrDefault().id + 1;
-            Barcodes.Add(item);
+            if(item != null)
+            {
+                if(Barcodes.Count> 0)
+                {
+                    item.id = Barcodes.LastOrDefault().id + 1;
+
+                }
+                else
+                {
+                    item.id = 1;
+
+                }
+                Barcodes.Add(item);
+              
+            }
             BarcodeDataGrid.ItemsSource = null;
             BarcodeDataGrid.ItemsSource = Barcodes;
+
 
         }
         private void updateBtn_Click(object sender, RoutedEventArgs e)
@@ -433,12 +519,16 @@ namespace Project
             UpdatePage Upage = new UpdatePage(item);
             Upage.ShowDialog();
             Barcode itemm = Upage.upitem;
-            Barcode Member = Barcodes.Where(m => m.id == item.id).Single();
-            Member.Position = itemm.Position;
-            Member.Barcode1D2D = itemm.Barcode1D2D;
-            Member.IsDrowText = itemm.IsDrowText;
-            Member.BarcodeType = itemm.BarcodeType;
-            Member.Pages = itemm.Pages;
+            if (itemm != null)
+            {
+                Barcode Member = Barcodes.Where(m => m.id == item.id).Single();
+                Member.Position = itemm.Position;
+                Member.Barcode1D2D = itemm.Barcode1D2D;
+                Member.IsDrowText = itemm.IsDrowText;
+                Member.BarcodeType = itemm.BarcodeType;
+                Member.Pages = itemm.Pages;
+
+            }
 
             BarcodeDataGrid.ItemsSource = null;
 
@@ -451,12 +541,17 @@ namespace Project
             UpdatePageText Upage = new UpdatePageText(item);
             Upage.ShowDialog();
             TextInformatiom itemm = Upage.viewitem;
-            TextInformatiom Member = Texts.Where(m => m.id == item.id).Single();
-            Member.Position = itemm.Position;
-            Member.Fontcolor = itemm.Fontcolor;
-            Member.FontType = itemm.FontType;
-            Member.FontSize = itemm.FontSize;
-            Member.Pages = itemm.Pages;
+            if (itemm != null)
+            {
+                TextInformatiom Member = Texts.Where(m => m.id == item.id).Single();
+                Member.Position = itemm.Position;
+                Member.Fontcolor = itemm.Fontcolor;
+                Member.FontType = itemm.FontType;
+                Member.FontSize = itemm.FontSize;
+                Member.Pages = itemm.Pages;
+            }
+
+                
             TextDataGrid.ItemsSource = null;
             TextDataGrid.ItemsSource = Texts;
         }
@@ -492,16 +587,20 @@ namespace Project
             InsertText Ipage = new InsertText();
             Ipage.ShowDialog();
             var item = Ipage.textinfo;
-            if (Texts.Count == 0)
+            if (item !=null)
             {
-                item.id =  1;
+                if (Texts.Count == 0)
+                {
+                    item.id = 1;
 
+                }
+                else
+                {
+                    item.id = Texts.LastOrDefault().id + 1;
+                }
+                Texts.Add(item);
             }
-            else
-            {
-                item.id = Texts.LastOrDefault().id + 1;
-            }
-            Texts.Add(item);
+           
             TextDataGrid.ItemsSource = null;
             TextDataGrid.ItemsSource = Texts;
         }

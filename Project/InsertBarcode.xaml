@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Project"
         mc:Ignorable="d"
-        Title="InsertBarcode" Width="320" Height="330" Background="Beige">
+        Title="InsertBarcode" ResizeMode="NoResize" Width="320" Height="330" Background="Beige">
     <Grid >
         <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="116,35,0,0" TextWrapping="Wrap" Text="Members" VerticalAlignment="Top"/>
         <TextBlock x:Name="txtPosition" HorizontalAlignment="Left" Margin="24,109,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Position"/></TextBlock>
@@ -24,7 +24,12 @@
         </ComboBox>
         <TextBlock x:Name="txtBarcode1D2D" HorizontalAlignment="Left" Margin="23,143,0,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.689,1.82"><Run Text="Barcode 1D-2D"/></TextBlock>
         <TextBlock x:Name="txtIsDrawText" HorizontalAlignment="Left" Margin="24,211,0,0" TextWrapping="Wrap" Text="IsDrawText" VerticalAlignment="Top"/>
-        <RadioButton  x:Name="RbNumberMood" Margin="119,211,154,65"  />
+        <CheckBox
+    x:Name="RbNumberMood"
+    IsThreeState="False"
+    Margin="119,211,154,65"
+    />
+        
         <Button x:Name="closeBtn" Content="Close" HorizontalAlignment="Left" Margin="152,260,0,0" VerticalAlignment="Top" Width="58" Click="closeBtn_Click"/>
         <Button x:Name="InsertBtn" Content="Insert" HorizontalAlignment="Left" Margin="226,260,0,0" VerticalAlignment="Top" Width="57" Click="InsertBtn_Click" />
 
