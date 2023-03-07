@@ -326,7 +326,7 @@ namespace Project
                     }
 
 
-                    outPdf.Save(Directory+"\\" + k + " new_filemarged.pdf");
+                    outPdf.Save(Directory+"\\" +"Marged from "+ k+" to "+ (k+marged) + ".pdf");
                 }
                 cou++;
                 int percents = (cou * 100) / total;
