@@ -170,12 +170,12 @@ namespace Project
                   
                 }
             }
-            int total = listoftextbarcode.Count * 3;
+            int total = listoftextbarcode.Count/marged;
             Directory = Directory + "Resulte";
 
             GemBox.Pdf.ComponentInfo.SetLicense("FREE-LIMITED-KEY");
             var copydocument = GemBox.Pdf.PdfDocument.Load(path);
-            
+
             for (int xxx = 1; xxx <= listoftextbarcode.Count; xxx++)
             {
                 for (int index = 0; index < copydocument.Pages.Count; index++)
@@ -186,8 +186,8 @@ namespace Project
                         foreach (var text in Barcodes)
                         {
                             string[] numbers = text.Pages.Split('-');
-                            string[]size = text.Position.Split("-");
-                            string d=text.Barcode1D2D.ToString();
+                            string[] size = text.Position.Split("-");
+                            string d = text.Barcode1D2D.ToString();
                             string type = text.BarcodeType.ToString();
                             if (Enumerable.Range(int.Parse(numbers[0]) - 1, int.Parse(numbers[1])).Contains(index))
                             {
@@ -211,11 +211,12 @@ namespace Project
                                 }
                                 else if (d == "2D")
                                 {
-                                    if(type== "QR_CODE")
+                                    if (type == "QR_CODE")
                                     {
                                         format = BarcodeFormat.QR_CODE;
 
-                                    }else if(type == "DATA_MATRIX")
+                                    }
+                                    else if (type == "DATA_MATRIX")
                                     {
                                         format = BarcodeFormat.DATA_MATRIX;
                                     }
@@ -225,8 +226,7 @@ namespace Project
 
                                     }
                                 }
-                               
-                              
+
                                 var barcodeWriter = new ZXing.SkiaSharp.BarcodeWriter()
                                 {
 
@@ -235,13 +235,13 @@ namespace Project
                                     {
                                         Height = 50,
                                         Width = 150,
-                                        PureBarcode= !(text.IsDrowText),
+                                        PureBarcode = !(text.IsDrowText),
                                     },
 
                                 };
 
                                 var bm = barcodeWriter
-                                .Write(listoftextbarcode[xxx-1]);
+                                .Write(listoftextbarcode[xxx - 1]);
 
                                 using (var data = bm.Encode(SKEncodedImageFormat.Png, 80))
                                 using (var stream = File.OpenWrite("out.jpg"))
@@ -250,128 +250,69 @@ namespace Project
                                     data.SaveTo(stream);
                                 }
                                 var img = PdfImage.Load("out.jpg");
-
-                               
-                                double x =double.Parse(size[0]) , y = page.CropBox.Top - double.Parse( size[1] ) - img.Size.Height;
+                                double x = double.Parse(size[0]), y = page.CropBox.Top - double.Parse(size[1]) - img.Size.Height;
 
                                 // Draw the image to the page.
                                 page.Content.DrawImage(img, new PdfPoint(x, y));
-                           
+
+                            }
+                        }
+                        foreach (var text in Texts)
+                        {
+                            string[] numbers = text.Pages.Split('-');
+                            string[] position = text.Position.Split('-');
+                            var rgb = System.Drawing.ColorTranslator.FromHtml(text.Fontcolor);
+                            if (Enumerable.Range(int.Parse(numbers[0]) - 1, int.Parse(numbers[1])).Contains(index))
+                            {
+                                formattedText.Color = PdfColor.FromRgb(rgb.R, rgb.G, rgb.B);
+                                formattedText.FontSize = text.FontSize;
+                                if (text.IsOmrFont == true && int.TryParse(listoftextbarcode[xxx - 1], out int value))
+                                {
+                                    string newvalue = string.Empty;
+                                    value = int.Parse(listoftextbarcode[xxx - 1]);
+                                    string binary = Convert.ToString(value, 2);
+                                    double x = double.Parse(position[0]), y = page.CropBox.Top - double.Parse(position[1]) - formattedText.Height;
+                                    if (text.FontType == "Arabic OMR")
+                                    {
+                                        newvalue = binary.Replace("0", "¹ ");
+                                        newvalue = newvalue.Replace("1", "² ");
+                                        formattedText.FontFamily = new PdfFontFamily("Resources", text.FontType);
+                                        formattedText.AppendLine(newvalue);
+
+
+                                    }
+                                    else if (text.FontType == "OMRBubblesLCextended")
+                                    {
+                                        newvalue = binary.Replace("0", "` ");
+                                        newvalue = newvalue.Replace("1", "~ ");
+                                        formattedText.FontFamily = new PdfFontFamily("Resources", text.FontType);
+                                        formattedText.AppendLine(newvalue);
+                                    }
+                                    else
+                                    {
+                                        formattedText.FontFamily = new PdfFontFamily(text.FontType);
+                                        formattedText.AppendLine(listoftextbarcode[xxx - 1]);
+                                    }
+                                    page.Content.DrawText(formattedText, new PdfPoint(x, y));
+
+
+                                }
+                                else
+                                {
+                                    formattedText.FontFamily = new PdfFontFamily(text.FontType);
+                                    double x = double.Parse(position[0]), y = page.CropBox.Top - double.Parse(position[1]) - formattedText.Height;
+                                    formattedText.AppendLine(listoftextbarcode[xxx - 1]);
+                                    page.Content.DrawText(formattedText, new PdfPoint(x, y));
+                                }
                             }
                         }
 
                     }
                 }
                 System.IO.Directory.CreateDirectory(Directory);
-                copydocument.Save(Directory +"\\"+ xxx + ".pdf");
+                copydocument.Save(Directory + "\\" + xxx + ".pdf");
                 copydocument.Close();
-                cou++;
-                int percents = (cou * 100) / total;
-
-                worker.ReportProgress(100, percents);
-            }
-            for (int xxx = 1; xxx <= listoftextbarcode.Count; xxx++)
-            {
-                copydocument = GemBox.Pdf.PdfDocument.Load(Directory +"\\"+ xxx + ".pdf");
-
-                for (int index = 0; index < copydocument.Pages.Count; index++)
-                {
-                    var page = copydocument.Pages[index];
-                    using (var formattedText = new PdfFormattedText())
-                    {
-                        foreach (var text in Texts)
-                        { 
-                            string[] numbers = text.Pages.Split('-');
-                            string[] position = text.Position.Split('-');
-                            var rgb = System.Drawing.ColorTranslator.FromHtml(text.Fontcolor);
-                            if (text.IsOmrFont == true && int.TryParse(listoftextbarcode[xxx - 1], out int value))
-                            {
-                                string newvalue=string.Empty;
-                                value = int.Parse(listoftextbarcode[xxx - 1]);
-                                string binary = Convert.ToString(value, 2);
-
-                                if (text.FontType== "Arabic OMR")
-                                {
-                                    newvalue = binary.Replace("0", "¹ ");
-                                    newvalue = newvalue.Replace("1", "² ");
-                                    if (Enumerable.Range(int.Parse(numbers[0]) - 1, int.Parse(numbers[1])).Contains(index))
-                                    {
-                                        formattedText.Color = PdfColor.FromRgb(rgb.R, rgb.G, rgb.B);
-
-                                        formattedText.FontFamily = new PdfFontFamily("Resources",text.FontType);
-                                        formattedText.FontSize = text.FontSize;
-                                        double x = double.Parse(position[0]), y = page.CropBox.Top - double.Parse(position[1]) - formattedText.Height;
-                                        formattedText.AppendLine(newvalue);
-
-                                        page.Content.DrawText(formattedText, new PdfPoint(x, y));
-
-                                    }
-
-
-                                }
-                                else if (text.FontType== "OMRBubblesLCextended")
-                                {
-                                    newvalue = binary.Replace("0", "` ");
-                                    newvalue = newvalue.Replace("1", "~ ");
-                                    if (Enumerable.Range(int.Parse(numbers[0]) - 1, int.Parse(numbers[1])).Contains(index))
-                                    {
-                                        formattedText.Color = PdfColor.FromRgb(rgb.R, rgb.G, rgb.B);
-
-                                        formattedText.FontFamily = new PdfFontFamily("Resources",text.FontType);
-                                        formattedText.FontSize = text.FontSize;
-                                        double x = double.Parse(position[0]), y = page.CropBox.Top - double.Parse(position[1]) - formattedText.Height;
-                                        formattedText.AppendLine(newvalue);
-
-                                        page.Content.DrawText(formattedText, new PdfPoint(x, y));
-
-                                    }
-
-                                }
-                                else
-                                {
-                                    if (Enumerable.Range(int.Parse(numbers[0]) - 1, int.Parse(numbers[1])).Contains(index))
-                                    {
-                                        formattedText.Color = PdfColor.FromRgb(rgb.R, rgb.G, rgb.B);
-
-                                        formattedText.FontFamily = new PdfFontFamily(text.FontType);
-                                        formattedText.FontSize = text.FontSize;
-                                        double x = double.Parse(position[0]), y = page.CropBox.Top - double.Parse(position[1]) - formattedText.Height;
-                                        formattedText.AppendLine(listoftextbarcode[xxx - 1]);
-
-                                        page.Content.DrawText(formattedText, new PdfPoint(x, y));
-
-                                    }
-
-                                }
-
-                            }
-                            else
-                            {
-                                if (Enumerable.Range(int.Parse(numbers[0]) - 1, int.Parse(numbers[1])).Contains(index))
-                                {
-                                    formattedText.Color = PdfColor.FromRgb(rgb.R, rgb.G, rgb.B);
-
-                                    formattedText.FontFamily = new PdfFontFamily(text.FontType);
-                                    formattedText.FontSize = text.FontSize;
-                                    double x = double.Parse(position[0]), y = page.CropBox.Top - double.Parse(position[1]) - formattedText.Height;
-                                    formattedText.AppendLine(listoftextbarcode[xxx - 1]);
-
-                                    page.Content.DrawText(formattedText, new PdfPoint(x, y));
-
-                                }
-
-                            }
-
-                        }
-
-                    }
-                }
-                copydocument.Save();
-                copydocument.Close();
-                cou++;
-                int percents = (cou * 100) / total;
-
-                worker.ReportProgress(100, percents);
+             
             }
             for (int k = 1; k <= listoftextbarcode.Count; k = k + marged)
             {
@@ -385,12 +326,11 @@ namespace Project
                     }
 
 
-                    outPdf.Save(Directory+"\\"  + k + " new_filemarged.pdf");
+                    outPdf.Save(Directory+"\\" + k + " new_filemarged.pdf");
                 }
                 cou++;
                 int percents = (cou * 100) / total;
-
-                worker.ReportProgress(100, percents);
+                worker.ReportProgress(total, percents);
             }
 
 
