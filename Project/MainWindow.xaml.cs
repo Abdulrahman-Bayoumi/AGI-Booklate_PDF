@@ -171,7 +171,7 @@ namespace Project
                 }
             }
             int total = listoftextbarcode.Count/marged;
-            Directory = Directory + "Resulte";
+            Directory = $"{Directory}\\Resulte";
 
             GemBox.Pdf.ComponentInfo.SetLicense("FREE-LIMITED-KEY");
             var copydocument = GemBox.Pdf.PdfDocument.Load(path);
@@ -326,7 +326,7 @@ namespace Project
                     }
                 }
                 System.IO.Directory.CreateDirectory(Directory);
-                copydocument.Save(Directory + "\\" + xxx + ".pdf");
+                copydocument.Save($"{Directory}_{xxx}.pdf");
                 copydocument.Close();
 
             }
@@ -336,13 +336,13 @@ namespace Project
                 {
                     for (int p = k; p < k + marged; p++)
                     {
-                        using (PdfDocument one = PdfReader.Open(Directory+"\\" + p + ".pdf", PdfDocumentOpenMode.Import))
+                        using (PdfDocument one = PdfReader.Open($"{Directory}_{p}.pdf", PdfDocumentOpenMode.Import))
 
                             CopyPages(one, outPdf);
                     }
 
 
-                    outPdf.Save(Directory+"\\" +"Marged from "+ k+" to "+ (k+marged-1) + ".pdf");
+                    outPdf.Save($"{Directory}Marged from { k} to {(k+marged-1)}.pdf");
                 }
                 cou++;
                 int percents = (cou * 100) / total;
@@ -360,7 +360,7 @@ namespace Project
 
             for(int y = 1; y <= listoftextbarcode.Count; y++)
             {
-                System.IO.File.Delete(Directory + "\\" + y + ".pdf");
+                System.IO.File.Delete($"{Directory}_{y}.pdf");
             }
 
         }
