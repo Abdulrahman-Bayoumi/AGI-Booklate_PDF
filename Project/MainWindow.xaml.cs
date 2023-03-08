@@ -175,20 +175,32 @@ namespace Project
 
             GemBox.Pdf.ComponentInfo.SetLicense("FREE-LIMITED-KEY");
             var copydocument = GemBox.Pdf.PdfDocument.Load(path);
-
+            // Loop to write Barcodes and Texts in Pdf and generate copy of this pdf 
             for (int xxx = 1; xxx <= listoftextbarcode.Count; xxx++)
             {
+                copydocument.Close();
+
+                copydocument = GemBox.Pdf.PdfDocument.Load(path);
+
+                // loop tp loop pages of pdf
                 for (int index = 0; index < copydocument.Pages.Count; index++)
                 {
+                    //Page 
                     var page = copydocument.Pages[index];
                     using (var formattedText = new PdfFormattedText())
                     {
+                        // Loop to write Barcodes in page of pdf 
                         foreach (var text in Barcodes)
                         {
+                            //get number os page that is exite in  each record of Table Barcodes
                             string[] numbers = text.Pages.Split('-');
+                            //get size of font tha is exit in record of table of Barcodes 
                             string[] size = text.Position.Split("-");
+                            //get type of barcode 1D or 2D
                             string d = text.Barcode1D2D.ToString();
+                            //get  type of Barcodes 
                             string type = text.BarcodeType.ToString();
+                            // checke if index of page in range numbers of pages 
                             if (Enumerable.Range(int.Parse(numbers[0]) - 1, int.Parse(numbers[1])).Contains(index))
                             {
                                 var format = new BarcodeFormat();
@@ -226,7 +238,7 @@ namespace Project
 
                                     }
                                 }
-
+                                //write Barcodes 
                                 var barcodeWriter = new ZXing.SkiaSharp.BarcodeWriter()
                                 {
 
@@ -242,7 +254,6 @@ namespace Project
 
                                 var bm = barcodeWriter
                                 .Write(listoftextbarcode[xxx - 1]);
-
                                 using (var data = bm.Encode(SKEncodedImageFormat.Png, 80))
                                 using (var stream = File.OpenWrite("out.jpg"))
                                 {
@@ -250,28 +261,33 @@ namespace Project
                                     data.SaveTo(stream);
                                 }
                                 var img = PdfImage.Load("out.jpg");
+                                //point of arcodes 
                                 double x = double.Parse(size[0]), y = page.CropBox.Top - double.Parse(size[1]) - img.Size.Height;
-
                                 // Draw the image to the page.
                                 page.Content.DrawImage(img, new PdfPoint(x, y));
 
                             }
                         }
+                        //loop to  write text in page of pdf 
                         foreach (var text in Texts)
                         {
+                            //numbers of pages that used to write text 
                             string[] numbers = text.Pages.Split('-');
+                            //Point that use to draw text 
                             string[] position = text.Position.Split('-');
                             var rgb = System.Drawing.ColorTranslator.FromHtml(text.Fontcolor);
                             if (Enumerable.Range(int.Parse(numbers[0]) - 1, int.Parse(numbers[1])).Contains(index))
                             {
                                 formattedText.Color = PdfColor.FromRgb(rgb.R, rgb.G, rgb.B);
                                 formattedText.FontSize = text.FontSize;
+                                // checke if omr is truue and  vale is number 
                                 if (text.IsOmrFont == true && int.TryParse(listoftextbarcode[xxx - 1], out int value))
                                 {
                                     string newvalue = string.Empty;
                                     value = int.Parse(listoftextbarcode[xxx - 1]);
                                     string binary = Convert.ToString(value, 2);
                                     double x = double.Parse(position[0]), y = page.CropBox.Top - double.Parse(position[1]) - formattedText.Height;
+
                                     if (text.FontType == "Arabic OMR")
                                     {
                                         newvalue = binary.Replace("0", "¹ ");
@@ -312,7 +328,7 @@ namespace Project
                 System.IO.Directory.CreateDirectory(Directory);
                 copydocument.Save(Directory + "\\" + xxx + ".pdf");
                 copydocument.Close();
-             
+
             }
             for (int k = 1; k <= listoftextbarcode.Count; k = k + marged)
             {
@@ -326,7 +342,7 @@ namespace Project
                     }
 
 
-                    outPdf.Save(Directory+"\\" +"Marged from "+ k+" to "+ (k+marged) + ".pdf");
+                    outPdf.Save(Directory+"\\" +"Marged from "+ k+" to "+ (k+marged-1) + ".pdf");
                 }
                 cou++;
                 int percents = (cou * 100) / total;
@@ -409,8 +425,11 @@ namespace Project
         {
             LoadingText.Visibility = Visibility.Visible;
             LoadingShape.Visibility = Visibility.Visible;
-           
-            worker.RunWorkerAsync();
+           if(worker.IsBusy== false)
+            {
+                worker.RunWorkerAsync();
+
+            }
 
 
         }
