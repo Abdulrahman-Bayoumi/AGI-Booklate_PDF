@@ -141,6 +141,7 @@ namespace Project
         //excel read method
         private void worker_DoWork(object sender, DoWorkEventArgs e)
         {
+
             bool? RbNumberMoodVl = false;
             int from = 0;
             int to = 0;
@@ -159,7 +160,7 @@ namespace Project
                 marged = int.Parse(txtmerged.Text);
 
             }));
-            string Directory = System.IO.Path.GetDirectoryName(path);
+            string Directoryy = System.IO.Path.GetDirectoryName(path);
 
             if (RbNumberMoodVl == true)
             {
@@ -171,8 +172,12 @@ namespace Project
                 }
             }
             int total = listoftextbarcode.Count/marged;
-            Directory = $"{Directory}\\Resulte";
+            Directoryy = $"{Directoryy}\\Resulte";
+            if (Directory.Exists(Directoryy))
+            {
+                System.IO.Directory.Delete(Directoryy, true);
 
+            }
             GemBox.Pdf.ComponentInfo.SetLicense("FREE-LIMITED-KEY");
             var copydocument = GemBox.Pdf.PdfDocument.Load(path);
             // Loop to write Barcodes and Texts in Pdf and generate copy of this pdf 
@@ -325,8 +330,12 @@ namespace Project
 
                     }
                 }
-                System.IO.Directory.CreateDirectory(Directory);
-                copydocument.Save($"{Directory}_{xxx}.pdf");
+                if (!Directory.Exists(Directoryy))
+                {
+                    System.IO.Directory.CreateDirectory(Directoryy);
+
+                }
+                copydocument.Save($"{Directoryy}\\_{xxx}.pdf");
                 copydocument.Close();
 
             }
@@ -336,13 +345,13 @@ namespace Project
                 {
                     for (int p = k; p < k + marged; p++)
                     {
-                        using (PdfDocument one = PdfReader.Open($"{Directory}_{p}.pdf", PdfDocumentOpenMode.Import))
+                        using (PdfDocument one = PdfReader.Open($"{Directoryy}\\_{p}.pdf", PdfDocumentOpenMode.Import))
 
                             CopyPages(one, outPdf);
                     }
 
 
-                    outPdf.Save($"{Directory}Marged from { k} to {(k+marged-1)}.pdf");
+                    outPdf.Save($"{Directoryy}\\Marged from { k} to {(k+marged-1)}.pdf");
                 }
                 cou++;
                 int percents = (cou * 100) / total;
@@ -360,7 +369,7 @@ namespace Project
 
             for(int y = 1; y <= listoftextbarcode.Count; y++)
             {
-                System.IO.File.Delete($"{Directory}_{y}.pdf");
+                System.IO.File.Delete($"{Directoryy}\\_{y}.pdf");
             }
 
         }
@@ -372,8 +381,9 @@ namespace Project
                 LoadingText.Foreground = new SolidColorBrush( System.Windows.Media.Color.FromRgb(0, 128, 0));
                 LoadingText.Content = "Completing";
 
-                //LoadingText.Visibility = Visibility.Collapsed;
                 LoadingShape.Visibility = Visibility.Collapsed;
+      
+
 
             }));
         }
@@ -423,6 +433,10 @@ namespace Project
 
         private void btnGenerate_Click(object sender, RoutedEventArgs e)
         {
+
+
+            LoadingText.Content = "";
+            
             LoadingText.Visibility = Visibility.Visible;
             LoadingShape.Visibility = Visibility.Visible;
            if(worker.IsBusy== false)

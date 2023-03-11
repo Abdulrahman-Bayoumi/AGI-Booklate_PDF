@@ -5113,23 +5113,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\dell\\.nuget\\packages\\": {},
+    "C:\\Users\\Abd-ElRahman\\.nuget\\packages\\": {},
     "C:\\Program Files\\DevExpress 22.2\\Components\\Offline Packages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\dell\\Documents\\GitHub\\AGI-Booklate_PDF\\Project\\Project.csproj",
+      "projectUniqueName": "C:\\Users\\Abd-ElRahman\\Source\\Repos\\AGI-Booklate_PDF\\Project\\Project.csproj",
       "projectName": "Project",
-      "projectPath": "C:\\Users\\dell\\Documents\\GitHub\\AGI-Booklate_PDF\\Project\\Project.csproj",
-      "packagesPath": "C:\\Users\\dell\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\dell\\Documents\\GitHub\\AGI-Booklate_PDF\\Project\\obj\\",
+      "projectPath": "C:\\Users\\Abd-ElRahman\\Source\\Repos\\AGI-Booklate_PDF\\Project\\Project.csproj",
+      "packagesPath": "C:\\Users\\Abd-ElRahman\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Abd-ElRahman\\Source\\Repos\\AGI-Booklate_PDF\\Project\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\DevExpress 22.2\\Components\\Offline Packages"
       ],
       "configFilePaths": [
-        "C:\\Users\\dell\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Abd-ElRahman\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 22.2.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -5237,7 +5237,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.103\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
       }
     }
   },
